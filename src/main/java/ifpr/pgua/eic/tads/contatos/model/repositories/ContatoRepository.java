@@ -9,6 +9,4 @@ import ifpr.pgua.eic.tads.contatos.model.Contato;
 public interface ContatoRepository {
     Resultado<Contato> cadastrar(String nome, String email, String Telefone);
     Resultado<List<Contato>> listarTodos();
-
-        
 }

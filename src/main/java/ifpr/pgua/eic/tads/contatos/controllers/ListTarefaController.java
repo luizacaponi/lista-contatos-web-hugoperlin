@@ -1,5 +1,13 @@
 package ifpr.pgua.eic.tads.contatos.controllers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.github.hugoperlin.results.Resultado;
+
+import ifpr.pgua.eic.tads.contatos.model.Contato;
 import ifpr.pgua.eic.tads.contatos.model.Tarefa;
 import ifpr.pgua.eic.tads.contatos.model.repositories.TarefaRepository;
 import io.javalin.http.Context;
@@ -7,29 +15,25 @@ import io.javalin.http.Handler;
 
 public class ListTarefaController {
     
-    private TarefaRepository tarefaRepository;
+    private TarefaRepository repository;
 
-    public ListTarefaController(TarefaRepository tarefaRepository){
-        this.tarefaRepository = tarefaRepository;
+    public ListTarefaController(TarefaRepository repository){
+        this.repository = repository;
     }
 
-    public Handler get = (Context ctx) -> {
+    public Handler get = (Context ctx)->{
+        
+        Resultado<List<Tarefa>> resultado = repository.listarTodas();
+        
+        Map<String,Object> model = new HashMap<>();
 
-        var resultado = tarefaRepository.listarTodos();
-
-        if (resultado.foiErro()) {
-            ctx.html("<h1>" + resultado.getMsg() + "</h1>");
-        } else {
-            var tarefas = resultado.comoSucesso().getObj();
-
-            String html = "<html><head><meta charset=\"UTF-8\"></head><body><h1>Lista de Tarefas</h1><ul>";
-
-            for (Tarefa t : tarefas) {
-            }
-
-            html += "</ul><a href=\"/\">Voltar</a></body></html>";
-            ctx.html(html);
+        model.put("resultado", resultado);
+        if(resultado.foiSucesso()){
+            model.put("lista", resultado.comoSucesso().getObj());
         }
+
+        ctx.render("templates/listTarefas.peb", model);
     };
+
 
 }

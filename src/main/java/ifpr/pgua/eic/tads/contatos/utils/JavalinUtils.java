@@ -27,7 +27,7 @@ public class JavalinUtils {
                 e.printStackTrace();
             }
             return null;
-        }, ".html");
+        }, ".html",".peb");
 
         
         Javalin app = Javalin.create(config->{

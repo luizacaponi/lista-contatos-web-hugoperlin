@@ -13,38 +13,35 @@ import ifpr.pgua.eic.tads.contatos.model.FabricaConexoes;
 import ifpr.pgua.eic.tads.contatos.model.Tarefa;
 
 public class JDBCTarefaDAO implements TarefaDAO {
-
     private FabricaConexoes fabricaConexao;
 
-    public JDBCTarefaDAO(FabricaConexoes fabricaConexao){
+    public JDBCTarefaDAO(FabricaConexoes fabricaConexao) {
         this.fabricaConexao = fabricaConexao;
     }
 
     @Override
     public Resultado<Tarefa> criar(Tarefa tarefa) {
-        try {
-            Connection con = fabricaConexao.getConnection();
+        try (Connection con = fabricaConexao.getConnection();) {
 
-            PreparedStatement pstm = con
-                    .prepareStatement("INSERT INTO oo_tarefas(titulo, descricao) VALUES (?, ?)");
+            PreparedStatement pstm = con.prepareStatement("INSERT INTO oo_tarefas(titulo,descricao,idCategoria) VALUES (?,?,?)");
 
             pstm.setString(1, tarefa.getTitulo());
             pstm.setString(2, tarefa.getDescricao());
-            
+            pstm.setInt(3,tarefa.getCategoria().getId());
+
             pstm.executeUpdate();
 
-            con.close();
-            return Resultado.sucesso("Tarefa cadastrada com sucesso!", tarefa);
+            return Resultado.sucesso("Tarefa cadastrada!", tarefa);
         } catch (SQLException e) {
-            return Resultado.erro(e.getMessage());
+            return Resultado.erro("Problema ao conectar " + e.getMessage());
         }
     }
 
     @Override
     public Resultado<List<Tarefa>> listar() {
-        ArrayList<Tarefa> lista = new ArrayList<>();
-        try {
-            Connection con = fabricaConexao.getConnection();
+        ArrayList<Tarefa> tarefas = new ArrayList<>();
+
+        try (Connection con = fabricaConexao.getConnection();) {
             PreparedStatement pstm = con.prepareStatement("SELECT * FROM oo_tarefas");
 
             ResultSet rs = pstm.executeQuery();
@@ -56,12 +53,14 @@ public class JDBCTarefaDAO implements TarefaDAO {
 
                 Tarefa tarefa = new Tarefa(id, titulo, descricao);
 
-                lista.add(tarefa);
+                tarefas.add(tarefa);
             }
             con.close();
-            return Resultado.sucesso("Tarefas carregadas", lista);
+            return Resultado.sucesso("Tarefas carregadas", tarefas);
         } catch (SQLException e) {
-            return Resultado.erro(e.getMessage());
+            return Resultado.erro("Problema ao fazer seleção!! " + e.getMessage());
         }
+
     }
+
 }

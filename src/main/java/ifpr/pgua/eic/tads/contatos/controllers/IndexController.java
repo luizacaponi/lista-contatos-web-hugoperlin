@@ -6,7 +6,7 @@ import io.javalin.http.Handler;
 public class IndexController {
     
     public Handler get = (Context ctx)->{
-        ctx.render("templates/index.html");
+        ctx.render("templates/index.peb");
     };
 
 }
