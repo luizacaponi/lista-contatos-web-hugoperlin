@@ -27,11 +27,11 @@ public class ImplTarefaRepository implements TarefaRepository {
 
         Tarefa tarefa = new Tarefa(titulo, descricao);
 
-        return dao.criar(tarefa); 
+        return dao.criar(tarefa);
     }
 
     @Override
     public Resultado<List<Tarefa>> listarTodos() {
-        return dao.listar(); 
+        return dao.listar();
     }
 }
