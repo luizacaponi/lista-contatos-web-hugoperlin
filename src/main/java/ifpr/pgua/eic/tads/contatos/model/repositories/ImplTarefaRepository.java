@@ -34,4 +34,9 @@ public class ImplTarefaRepository implements TarefaRepository {
     public Resultado<List<Tarefa>> listarTodos() {
         return dao.listar();
     }
+
+    @Override
+    public void cadastrar(Tarefa tarefa) {
+        throw new UnsupportedOperationException("Unimplemented method 'cadastrar'");
+    }
 }
