@@ -22,16 +22,14 @@ public class JDBCTarefaDAO implements TarefaDAO {
 
     @Override
     public Resultado<Tarefa> criar(Tarefa tarefa) {
-
         try {
             Connection con = fabricaConexao.getConnection();
 
             PreparedStatement pstm = con
-                    .prepareStatement("INSERT INTO oo_contatos(nome,email,telefone) VALUES (?,?,?)");
+                    .prepareStatement("INSERT INTO oo_tarefas(titulo, descricao) VALUES (?, ?)");
 
-            pstm.setInt(1, tarefa.getId());
-            pstm.setString(2, tarefa.getTitulo());
-            pstm.setString(3, tarefa.getDescricao());
+            pstm.setString(1, tarefa.getTitulo());
+            pstm.setString(2, tarefa.getDescricao());
             
             pstm.executeUpdate();
 
@@ -47,7 +45,7 @@ public class JDBCTarefaDAO implements TarefaDAO {
         ArrayList<Tarefa> lista = new ArrayList<>();
         try {
             Connection con = fabricaConexao.getConnection();
-            PreparedStatement pstm = con.prepareStatement("SELECT * FROM oo_contatos");
+            PreparedStatement pstm = con.prepareStatement("SELECT * FROM oo_tarefas");
 
             ResultSet rs = pstm.executeQuery();
 
@@ -56,16 +54,14 @@ public class JDBCTarefaDAO implements TarefaDAO {
                 String titulo = rs.getString("titulo");
                 String descricao = rs.getString("descricao");
 
-                Tarefa tarefa = new Tarefa (id, titulo, descricao);
+                Tarefa tarefa = new Tarefa(id, titulo, descricao);
 
                 lista.add(tarefa);
             }
             con.close();
-            return Resultado.sucesso("Contatos carregados", lista);
+            return Resultado.sucesso("Tarefas carregadas", lista);
         } catch (SQLException e) {
             return Resultado.erro(e.getMessage());
         }
-    
     }
-
 }

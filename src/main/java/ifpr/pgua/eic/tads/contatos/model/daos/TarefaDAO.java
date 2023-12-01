@@ -9,5 +9,4 @@ import ifpr.pgua.eic.tads.contatos.model.Tarefa;
 public interface TarefaDAO {
     Resultado<Tarefa> criar(Tarefa tarefa);
     Resultado<List<Tarefa>> listar();
-    
 }
