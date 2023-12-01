@@ -25,11 +25,11 @@ public class ListTarefaController {
             String html = "<html><head><meta charset=\"UTF-8\"></head><body><h1>Lista de Tarefas</h1><ul>";
 
             for (Tarefa t : tarefas) {
-                html += "<li>" + t.toString() + "</li>";
             }
 
             html += "</ul><a href=\"/\">Voltar</a></body></html>";
             ctx.html(html);
         }
     };
+
 }
